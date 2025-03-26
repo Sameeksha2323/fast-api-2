@@ -94,7 +94,24 @@ import tempfile
 import os
 from fastapi.responses import FileResponse
 
-@app.post("/generate_report")
+import tempfile
+import os
+from fastapi import HTTPException
+from fastapi.responses import FileResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Table, TableStyle, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from reportlab.lib.units import inch
+from reportlab.lib.utils import ImageReader  # Import ImageReader
+
+# Assume supabase and other imports are already done
+# Example:
+# from supabase import create_client, Client
+# supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+
 def generate_report(data: GenerateReportRequest):
     try:
         student_id, program_id, educator_employee_id, quarter = data.student_id, data.program_id, data.educator_employee_id, data.quarter
@@ -192,6 +209,8 @@ def generate_report(data: GenerateReportRequest):
             c.setFillColor(colors.forestgreen)  # Green color theme
             c.setFont("Helvetica-Bold", 14)
             # Using Paragraph for dynamic positioning
+            styles = getSampleStyleSheet() # define styles here.
+            styleN = styles["Normal"]
             p = Paragraph("<b>General Reporting</b>", styles['h2']) # Using Paragraph to write.
             p.wrapOn(c, width - 200, height)
             p.drawOn(c, 100, y_position)
@@ -215,6 +234,8 @@ def generate_report(data: GenerateReportRequest):
         # Performance Records Table
         c.setFillColor(colors.darkblue)
         c.setFont("Helvetica-Bold", 14)
+        styles = getSampleStyleSheet()  # define styles here.
+        styleN = styles["Normal"]
         p = Paragraph("<b>Performance Records</b>", styles['h2'])  # Using Paragraph to write.
         p.wrapOn(c, width - 200, height)
         p.drawOn(c, 100, y_position)
@@ -267,6 +288,16 @@ def generate_report(data: GenerateReportRequest):
     except Exception as e:
         print("Error generating report:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
+      
+           
+       
+           
+              
+
+       
+          
+       
+        
 
 
 
